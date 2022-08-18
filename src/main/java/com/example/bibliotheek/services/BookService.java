@@ -11,8 +11,8 @@ import java.util.List;
 @Service
 public class BookService {
 
-    private BookRepository bookRepository;
-    private AuthorRepository authorRepository;
+    private final BookRepository bookRepository;
+    private final AuthorRepository authorRepository;
 
     public BookService(BookRepository bookRepository,
                        AuthorRepository authorRepository){
@@ -29,7 +29,7 @@ public class BookService {
     }
 
     public List<Book> getAllBooksByAuthor(String name){
-        Author author = authorRepository.findAuthorByInitialsAndLastnameEquals(name);
+        Author author = authorRepository.findAuthorByInitialsAndLastnameEqualsIgnoreCase(name);
         return bookRepository.findAllByAuthor(author);
     }
 }

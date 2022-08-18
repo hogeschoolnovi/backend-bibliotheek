@@ -1,25 +1,20 @@
-package com.example.bibliotheek.models;
+package com.example.bibliotheek.dtos;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
+import com.example.bibliotheek.models.Gender;
+
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.UUID;
 
-@Entity
-public class Author {
-    @Id
-    @GeneratedValue
-    private Long id;
+public class AuthorDto {
 
+    private Long id;
     private String initials;
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
     private Gender gender;
 
-    public Author(String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+    public AuthorDto( String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
         this.initials = initials;
         this.firstname = firstname;
         this.lastname = lastname;

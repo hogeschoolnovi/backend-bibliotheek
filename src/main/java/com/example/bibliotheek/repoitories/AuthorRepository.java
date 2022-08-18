@@ -4,5 +4,5 @@ import com.example.bibliotheek.models.Author;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface AuthorRepository extends JpaRepository<Author, Long> {
-    Author findAuthorByInitialsAndLastnameEquals(String name);
+    Author findAuthorByInitialsAndLastnameEqualsIgnoreCase(String name);
 }

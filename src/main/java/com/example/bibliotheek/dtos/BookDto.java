@@ -1,24 +1,22 @@
-package com.example.bibliotheek.models;
+package com.example.bibliotheek.dtos;
 
-import javax.persistence.*;
+import com.example.bibliotheek.models.Author;
 
-@Entity
-public class Book {
+import javax.persistence.Id;
+import javax.persistence.ManyToOne;
 
-    @Id
+public class BookDto {
+
     private String isbn;
-
     private String title;
     private String subtitle;
     private String genre;
     private String language;
     private String type;
     private String publisher;
-
-    @ManyToOne
     private Author author;
 
-    public Book(String isbn, String title, String subtitle, String genre, String language, String type, String publisher, Author author) {
+    public BookDto(String isbn, String title, String subtitle, String genre, String language, String type, String publisher, Author author) {
         this.isbn = isbn;
         this.title = title;
         this.subtitle = subtitle;
