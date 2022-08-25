@@ -5,19 +5,29 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
 import java.util.Date;
+import java.util.Objects;
 import java.util.UUID;
 
 @Entity
 public class Author {
     @Id
     @GeneratedValue
-    private Long id;
+    private UUID uuid;
 
     private String initials;
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
     private Gender gender;
+
+    public Author(UUID uuid, String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+        this.uuid = uuid;
+        this.initials = initials;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
 
     public Author(String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
         this.initials = initials;
@@ -27,8 +37,12 @@ public class Author {
         this.gender = gender;
     }
 
-    public Long getId() {
-        return id;
+    public Author() {
+
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getInitials() {
@@ -51,8 +65,8 @@ public class Author {
         return gender;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public void setInitials(String initials) {
@@ -73,5 +87,18 @@ public class Author {
 
     public void setGender(Gender gender) {
         this.gender = gender;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Author)) return false;
+        Author author = (Author) o;
+        return getUuid().equals(author.getUuid()) && getInitials().equals(author.getInitials()) && getFirstname().equals(author.getFirstname()) && getLastname().equals(author.getLastname()) && getDateOfBirth().equals(author.getDateOfBirth()) && getGender() == author.getGender();
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getUuid(), getInitials(), getFirstname(), getLastname(), getDateOfBirth(), getGender());
     }
 }

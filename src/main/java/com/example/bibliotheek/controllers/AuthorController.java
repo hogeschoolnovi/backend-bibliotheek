@@ -5,6 +5,7 @@ import com.example.bibliotheek.services.AuthorService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/authors")
@@ -22,22 +23,22 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public AuthorDto getAuthor(@PathVariable Long id){
+    public AuthorDto getAuthor(@PathVariable UUID id){
         return authorService.getAuthor(id);
     }
 
     @PostMapping
-    public AuthorDto saveAuthor(AuthorDto dto){
+    public AuthorDto saveAuthor(@RequestBody AuthorDto dto){
         return authorService.saveAuthor(dto);
     }
 
     @PutMapping("/update/{id}")
-    public AuthorDto updateAuthor(AuthorDto dto, @PathVariable Long id){
+    public AuthorDto updateAuthor(@RequestBody AuthorDto dto, @PathVariable UUID id){
         return authorService.updateAuthor(dto, id);
     }
 
     @DeleteMapping("/delete/{id}")
-    public void deleteAuthor(@PathVariable Long id){
+    public void deleteAuthor(@PathVariable UUID id){
         authorService.deleteAuthor(id);
     }
 }

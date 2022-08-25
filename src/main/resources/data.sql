@@ -1,0 +1,6 @@
+INSERT INTO author (uuid, initials, firstname, lastname, date_of_birth, gender) VALUES ('aabe4998-522a-4bd7-97c4-c296b7fb0336', 'J.K.', 'Joanne Kathleen', 'Rowling', '1965-07-31', 1);
+INSERT INTO author (uuid, initials, firstname, lastname, date_of_birth, gender) VALUES('70080f94-539c-466d-9976-b838dc037842', 'R.', 'Roald', 'Dahl', '1916-09-13)', 0);
+
+INSERT INTO book (isbn, title, subtitle, genre, language, type, publisher, author_uuid) VALUES ('9789076174105', 'Harry Potter', 'en de steen der wijzen', 'fiction', 'NL', 'paperback', 'uitgeverij de Harmonie', 'aabe4998-522a-4bd7-97c4-c296b7fb0336');
+INSERT INTO book (isbn, title, subtitle, genre, language, type, publisher, author_uuid) VALUES ('9781781103470', 'Harry Potter', 'en de geheime kamer', 'fiction', 'NL', 'paperback', 'Pottermore publishing', 'aabe4998-522a-4bd7-97c4-c296b7fb0336');
+INSERT INTO book (isbn, title, subtitle, genre, language, type, publisher, author_uuid) VALUES ('9789026139406', 'Mathilda', '', 'fiction', 'NL', 'paperback', 'de Fontein Jeugd', '70080f94-539c-466d-9976-b838dc037842');

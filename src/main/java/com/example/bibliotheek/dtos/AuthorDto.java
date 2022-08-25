@@ -7,14 +7,15 @@ import java.util.UUID;
 
 public class AuthorDto {
 
-    private Long id;
+    private UUID uuid;
     private String initials;
     private String firstname;
     private String lastname;
     private LocalDate dateOfBirth;
     private Gender gender;
 
-    public AuthorDto( String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+    public AuthorDto(UUID uuid, String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+        this.uuid = uuid;
         this.initials = initials;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -22,8 +23,16 @@ public class AuthorDto {
         this.gender = gender;
     }
 
-    public Long getId() {
-        return id;
+    public AuthorDto(String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+        this.initials = initials;
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.dateOfBirth = dateOfBirth;
+        this.gender = gender;
+    }
+
+    public UUID getUuid() {
+        return uuid;
     }
 
     public String getInitials() {
@@ -46,8 +55,8 @@ public class AuthorDto {
         return gender;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setUuid(UUID uuid) {
+        this.uuid = uuid;
     }
 
     public void setInitials(String initials) {

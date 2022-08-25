@@ -8,6 +8,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Service
 public class AuthorService {
@@ -22,7 +23,7 @@ public class AuthorService {
         return (transferAuthorListToAuthorDtoList(authorRepository.findAll()));
     }
 
-    public AuthorDto getAuthor(Long id){
+    public AuthorDto getAuthor(UUID id){
 
         if(authorRepository.findById(id).isPresent()){
             return (transferAuthorToAuthorDto(authorRepository.findById(id).get()));
@@ -36,7 +37,7 @@ public class AuthorService {
         return (transferAuthorToAuthorDto(authorRepository.save(transferAuthorDtoToAuthor(dto))));
     }
 
-    public AuthorDto updateAuthor(AuthorDto dto, Long id){
+    public AuthorDto updateAuthor(AuthorDto dto, UUID id){
         if(authorRepository.findById(id).isPresent()){
             Author author = authorRepository.findById(id).get();
             if(!author.getInitials().equals(dto.getInitials())){
@@ -54,6 +55,7 @@ public class AuthorService {
             if(!author.getGender().equals(dto.getGender())){
                 author.setGender(dto.getGender());
             }
+
             return (transferAuthorToAuthorDto(authorRepository.save(author)));
 
         }else {
@@ -61,16 +63,16 @@ public class AuthorService {
         }
     }
 
-    public void deleteAuthor(Long id){
+    public void deleteAuthor(UUID id){
         authorRepository.deleteById(id);
     }
 
     public Author transferAuthorDtoToAuthor(AuthorDto dto){
-        return (new Author(dto.getInitials(), dto.getFirstname(), dto.getLastname(), dto.getDateOfBirth(), dto.getGender()));
+        return (new Author(dto.getUuid(), dto.getInitials(), dto.getFirstname(), dto.getLastname(), dto.getDateOfBirth(), dto.getGender()));
     }
 
     public AuthorDto transferAuthorToAuthorDto(Author author){
-        return (new AuthorDto(author.getInitials(), author.getFirstname(), author.getLastname(), author.getDateOfBirth(), author.getGender()));
+        return (new AuthorDto(author.getUuid(), author.getInitials(), author.getFirstname(), author.getLastname(), author.getDateOfBirth(), author.getGender()));
     }
 
     public List<AuthorDto> transferAuthorListToAuthorDtoList(List<Author> authors){

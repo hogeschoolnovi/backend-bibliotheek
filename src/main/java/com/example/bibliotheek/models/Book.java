@@ -1,6 +1,7 @@
 package com.example.bibliotheek.models;
 
 import javax.persistence.*;
+import java.util.Objects;
 
 @Entity
 public class Book {
@@ -27,6 +28,10 @@ public class Book {
         this.type = type;
         this.publisher = publisher;
         this.author = author;
+    }
+
+    public Book() {
+
     }
 
     public String getIsbn() {
@@ -91,5 +96,18 @@ public class Book {
 
     public void setAuthor(Author author) {
         this.author = author;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Book)) return false;
+        Book book = (Book) o;
+        return getIsbn().equals(book.getIsbn()) && getTitle().equals(book.getTitle()) && getSubtitle().equals(book.getSubtitle()) && getGenre().equals(book.getGenre()) && getLanguage().equals(book.getLanguage()) && getType().equals(book.getType()) && getPublisher().equals(book.getPublisher()) && getAuthor().equals(book.getAuthor());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getIsbn(), getTitle(), getSubtitle(), getGenre(), getLanguage(), getType(), getPublisher(), getAuthor());
     }
 }

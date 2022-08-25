@@ -1,12 +1,8 @@
 package com.example.bibliotheek.dtos;
 
-import com.example.bibliotheek.models.Author;
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import java.util.UUID;
 
-import javax.persistence.Id;
-import javax.persistence.ManyToOne;
-
-public class BookDto {
+public class BookInputDto {
 
     private String isbn;
     private String title;
@@ -16,11 +12,10 @@ public class BookDto {
     private String type;
     private String publisher;
 
-    private AuthorDto authorDto;
+    private UUID uuid;
 
 
-
-    public BookDto(String isbn, String title, String subtitle, String genre, String language, String type, String publisher, AuthorDto authorDto) {
+    public BookInputDto(String isbn, String title, String subtitle, String genre, String language, String type, String publisher, UUID uuid) {
         this.isbn = isbn;
         this.title = title;
         this.subtitle = subtitle;
@@ -28,7 +23,7 @@ public class BookDto {
         this.language = language;
         this.type = type;
         this.publisher = publisher;
-        this.authorDto = authorDto;
+        this.uuid = uuid;
     }
 
     public String getIsbn() {
@@ -59,39 +54,42 @@ public class BookDto {
         return publisher;
     }
 
-    public AuthorDto getAuthorDto() {
-        return authorDto;
+    public UUID getUuid() {
+        return uuid;
     }
 
-    public void setIsbn(String isbn) {
+    public void setIsbn (String isbn){
         this.isbn = isbn;
     }
 
-    public void setTitle(String title) {
+    public void setTitle (String title){
         this.title = title;
     }
 
-    public void setSubtitle(String subtitle) {
+    public void setSubtitle (String subtitle){
         this.subtitle = subtitle;
     }
 
-    public void setGenre(String genre) {
+    public void setGenre (String genre){
         this.genre = genre;
     }
 
-    public void setLanguage(String language) {
+    public void setLanguage (String language){
         this.language = language;
     }
 
-    public void setType(String type) {
+    public void setType (String type){
         this.type = type;
     }
 
-    public void setPublisher(String publisher) {
+    public void setPublisher (String publisher){
         this.publisher = publisher;
     }
 
-    public void setAuthorDto(AuthorDto authorDto) {
-        this.authorDto = authorDto;
+    public void setUuid (UUID uuid){
+        this.uuid = uuid;
     }
 }
+
+
+
