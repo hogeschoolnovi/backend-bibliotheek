@@ -1,14 +1,14 @@
 package com.example.bibliotheek.services;
 
-import com.example.bibliotheek.dtos.AuthorDto;
 import com.example.bibliotheek.dtos.BookDto;
 import com.example.bibliotheek.dtos.BookInputDto;
+import com.example.bibliotheek.exceptions.AuthorNotFoundException;
+import com.example.bibliotheek.exceptions.RecordNotFoundException;
 import com.example.bibliotheek.models.Author;
 import com.example.bibliotheek.models.Book;
 import com.example.bibliotheek.models.Gender;
 import com.example.bibliotheek.repoitories.AuthorRepository;
 import com.example.bibliotheek.repoitories.BookRepository;
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -43,8 +43,6 @@ class BookServiceTest {
 
     @InjectMocks
     BookService bookService ;
-
-
 
     @Captor
     ArgumentCaptor<Book> captor;
@@ -81,8 +79,8 @@ class BookServiceTest {
 
         List<BookDto> booksFound = bookService.getAllBooksByTitle("Harry Potter");
 
-        assertEquals(book1.getTitle(), booksFound.get(0).getTitle());
-        assertEquals(book2.getTitle(), booksFound.get(1).getTitle());
+        assertEquals(book1.getTitle(), booksFound.get(0).title());
+        assertEquals(book2.getTitle(), booksFound.get(1).title());
     }
 
     @Test
@@ -92,8 +90,8 @@ class BookServiceTest {
 
         List<BookDto> booksFound = bookService.getAllBooksByAuthor("J.K.", "Rowling");
 
-        assertEquals(book1.getTitle(), booksFound.get(0).getTitle());
-        assertEquals(book2.getTitle(), booksFound.get(1).getTitle());
+        assertEquals(book1.getTitle(), booksFound.get(0).title());
+        assertEquals(book2.getTitle(), booksFound.get(1).title());
     }
 
     @Test
@@ -102,13 +100,21 @@ class BookServiceTest {
 
         BookDto dto = bookService.getBook("9789076174105");
 
-        assertEquals(book1.getTitle(), dto.getTitle());
+        assertEquals(book1.getTitle(), dto.title());
     }
+
+    @Test
+    void getBookThrowsExceptionTest() {
+        assertThrows(RecordNotFoundException.class, () -> bookService.getBook(null));
+    }
+
     @Test
     void saveBook() {
-        BookInputDto dto = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", author1.getUuid());
+        BookInputDto dto = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"));
 
+        when(authorRepository.findById(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"))).thenReturn(Optional.of(author1));
         when(bookRepository.save(book1)).thenReturn(book1);
+
         bookService.saveBook(dto);
         verify(bookRepository, times(1)).save(captor.capture());
         Book book = captor.getValue();
@@ -120,12 +126,51 @@ class BookServiceTest {
         assertEquals(book1.getPublisher(), book.getPublisher());
         assertEquals(book1.getGenre(), book.getGenre());
     }
-//
-//    @Test
-//    void updateBook() {
-//    }
-//
-//    @Test
-//    void deleteBook() {
-//    }
+
+    @Test
+    void saveBookThrowsExceptionTest() {
+        assertThrows(AuthorNotFoundException.class, () -> bookService.saveBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0337"))));
+    }
+    @Test
+    void updateBook() {
+        BookInputDto bookInputDto = new BookInputDto("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie",UUID.fromString("70080f94-539c-466d-9976-b838dc037842") );
+        Book book = new Book("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie", author1);
+        Author author3 = new Author(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        Book book4 = new Book("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie", author3);
+
+        when(bookRepository.findById("9789076174105")).thenReturn(Optional.of(book1));
+        when(authorRepository.findById(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"))).thenReturn(Optional.of(author2));
+        when(bookRepository.save(any())).thenReturn(book4);
+
+        bookService.updateBook(bookInputDto,"9789076174105");
+
+        verify(bookRepository, times(1)).save(captor.capture());
+
+        Book captured = captor.getValue();
+
+        assertEquals(book.getTitle(), captured.getTitle());
+        assertEquals(book.getGenre(), captured.getGenre());
+        assertEquals(book.getSubtitle(), captured.getSubtitle());
+        assertEquals(book.getPublisher(), captured.getPublisher());
+        assertEquals(book.getType(), captured.getType());
+        assertEquals(book.getLanguage(), captured.getLanguage());
+    }
+
+    @Test
+    void updateBookThrowsExceptionForBookTest() {
+        assertThrows(RecordNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336")), "9789076174103"));
+    }
+
+    @Test
+    void updateBookThrowsExceptionForAuthorTest() {
+        when(bookRepository.findById(any())).thenReturn(Optional.of(book1));
+        assertThrows(AuthorNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb5689")), "9789076174105"));
+    }
+
+    @Test
+    void deleteBook() {
+        bookService.deleteBook("9789076174105");
+
+        verify(bookRepository).deleteById("9789076174105");
+    }
 }

@@ -1,7 +1,7 @@
 package com.example.bibliotheek.services;
 
 import com.example.bibliotheek.dtos.AuthorDto;
-import com.example.bibliotheek.exceptions.RecordNotFoundException;
+import com.example.bibliotheek.exceptions.AuthorNotFoundException;
 import com.example.bibliotheek.models.Author;
 import com.example.bibliotheek.repoitories.AuthorRepository;
 import org.springframework.stereotype.Service;
@@ -28,7 +28,7 @@ public class AuthorService {
         if(authorRepository.findById(id).isPresent()){
             return (transferAuthorToAuthorDto(authorRepository.findById(id).get()));
         }else {
-            throw new RecordNotFoundException("There is no Author known by id" + id);
+            throw new AuthorNotFoundException("There is no Author known by id" + id);
         }
 
     }
@@ -40,26 +40,26 @@ public class AuthorService {
     public AuthorDto updateAuthor(AuthorDto dto, UUID id){
         if(authorRepository.findById(id).isPresent()){
             Author author = authorRepository.findById(id).get();
-            if(!author.getInitials().equals(dto.getInitials())){
-                author.setInitials(dto.getInitials());
+            if(!author.getInitials().equals(dto.initials())){
+                author.setInitials(dto.initials());
             }
-            if(!author.getFirstname().equals(dto.getFirstname())){
-                author.setFirstname(dto.getFirstname());
+            if(!author.getFirstname().equals(dto.firstname())){
+                author.setFirstname(dto.firstname());
             }
-            if(!author.getLastname().equals(dto.getLastname())){
-                author.setLastname(dto.getLastname());
+            if(!author.getLastname().equals(dto.lastname())){
+                author.setLastname(dto.lastname());
             }
-            if(!author.getDateOfBirth().equals(dto.getDateOfBirth())){
-                author.setDateOfBirth(dto.getDateOfBirth());
+            if(!author.getDateOfBirth().equals(dto.dateOfBirth())){
+                author.setDateOfBirth(dto.dateOfBirth());
             }
-            if(!author.getGender().equals(dto.getGender())){
-                author.setGender(dto.getGender());
+            if(!author.getGender().equals(dto.gender())){
+                author.setGender(dto.gender());
             }
 
             return (transferAuthorToAuthorDto(authorRepository.save(author)));
 
         }else {
-            throw new RecordNotFoundException("There is no author known by this id " + id);
+            throw new AuthorNotFoundException("There is no author known by this id " + id);
         }
     }
 
@@ -68,7 +68,7 @@ public class AuthorService {
     }
 
     public Author transferAuthorDtoToAuthor(AuthorDto dto){
-        return (new Author(dto.getUuid(), dto.getInitials(), dto.getFirstname(), dto.getLastname(), dto.getDateOfBirth(), dto.getGender()));
+        return (new Author(dto.uuid(), dto.initials(), dto.firstname(), dto.lastname(), dto.dateOfBirth(), dto.gender()));
     }
 
     public AuthorDto transferAuthorToAuthorDto(Author author){

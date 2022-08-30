@@ -66,10 +66,6 @@ public class Book {
         return author;
     }
 
-    public void setIsbn(String isbn) {
-        this.isbn = isbn;
-    }
-
     public void setTitle(String title) {
         this.title = title;
     }
@@ -101,8 +97,7 @@ public class Book {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Book)) return false;
-        Book book = (Book) o;
+        if (!(o instanceof Book book)) return false;
         return getIsbn().equals(book.getIsbn()) && getTitle().equals(book.getTitle()) && getSubtitle().equals(book.getSubtitle()) && getGenre().equals(book.getGenre()) && getLanguage().equals(book.getLanguage()) && getType().equals(book.getType()) && getPublisher().equals(book.getPublisher()) && getAuthor().equals(book.getAuthor());
     }
 

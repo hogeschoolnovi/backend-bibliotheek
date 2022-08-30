@@ -1,6 +1,7 @@
 package com.example.bibliotheek.services;
 
 import com.example.bibliotheek.dtos.AuthorDto;
+import com.example.bibliotheek.exceptions.AuthorNotFoundException;
 import com.example.bibliotheek.exceptions.RecordNotFoundException;
 import com.example.bibliotheek.models.Author;
 import com.example.bibliotheek.models.Gender;
@@ -50,12 +51,12 @@ class AuthorServiceTest {
         List<Author> authors = authorRepository.findAll();
         List<AuthorDto> dtos = authorService.getAllAuthors();
 
-        assertEquals(authors.get(0).getFirstname(), dtos.get(0).getFirstname());
-        assertEquals(authors.get(0).getGender(), dtos.get(0).getGender());
-        assertEquals(authors.get(0).getLastname(), dtos.get(0).getLastname());
-        assertEquals(authors.get(0).getInitials(), dtos.get(0).getInitials());
-        assertEquals(authors.get(0).getDateOfBirth(), dtos.get(0).getDateOfBirth());
-        assertEquals(authors.get(0).getUuid(), dtos.get(0).getUuid());
+        assertEquals(authors.get(0).getFirstname(), dtos.get(0).firstname());
+        assertEquals(authors.get(0).getGender(), dtos.get(0).gender());
+        assertEquals(authors.get(0).getLastname(), dtos.get(0).lastname());
+        assertEquals(authors.get(0).getInitials(), dtos.get(0).initials());
+        assertEquals(authors.get(0).getDateOfBirth(), dtos.get(0).dateOfBirth());
+        assertEquals(authors.get(0).getUuid(), dtos.get(0).uuid());
 
     }
 
@@ -68,17 +69,17 @@ class AuthorServiceTest {
         Author author = authorRepository.findById(uuid).get();
         AuthorDto dto = authorService.getAuthor(uuid);
 
-        assertEquals(author.getFirstname(), dto.getFirstname());
-        assertEquals(author.getGender(), dto.getGender());
-        assertEquals(author.getLastname(), dto.getLastname());
-        assertEquals(author.getInitials(), dto.getInitials());
-        assertEquals(author.getDateOfBirth(), dto.getDateOfBirth());
+        assertEquals(author.getFirstname(), dto.firstname());
+        assertEquals(author.getGender(), dto.gender());
+        assertEquals(author.getLastname(), dto.lastname());
+        assertEquals(author.getInitials(), dto.initials());
+        assertEquals(author.getDateOfBirth(), dto.dateOfBirth());
 
     }
 
     @Test
     void getAuthorThrowsExceptionTest() {
-        assertThrows(RecordNotFoundException.class, () -> authorService.getAuthor(null));
+        assertThrows(AuthorNotFoundException.class, () -> authorService.getAuthor(null));
     }
 
 
@@ -112,19 +113,19 @@ class AuthorServiceTest {
 
         Author captured = argumentCaptor.getValue();
 
-        assertEquals(authorDto.getUuid(), captured.getUuid());
-        assertEquals(authorDto.getFirstname(), captured.getFirstname());
-        assertEquals(authorDto.getGender(), captured.getGender());
-        assertEquals(authorDto.getLastname(), captured.getLastname());
-        assertEquals(authorDto.getInitials(), captured.getInitials());
-        assertEquals(authorDto.getDateOfBirth(), captured.getDateOfBirth());
+        assertEquals(authorDto.uuid(), captured.getUuid());
+        assertEquals(authorDto.firstname(), captured.getFirstname());
+        assertEquals(authorDto.gender(), captured.getGender());
+        assertEquals(authorDto.lastname(), captured.getLastname());
+        assertEquals(authorDto.initials(), captured.getInitials());
+        assertEquals(authorDto.dateOfBirth(), captured.getDateOfBirth());
     }
 
     @Test
     void updateAuthorThrowsExceptionTest() {
         AuthorDto authorDto = new AuthorDto(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K", "Joanne Katharina", "Unknown", LocalDate.of(1968,7,31), Gender.OTHER);
 
-        assertThrows(RecordNotFoundException.class, () -> authorService.updateAuthor(authorDto, null));
+        assertThrows(AuthorNotFoundException.class, () -> authorService.updateAuthor(authorDto, null));
     }
 
     @Test

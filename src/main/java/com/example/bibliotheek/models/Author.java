@@ -4,7 +4,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import java.time.LocalDate;
-import java.util.Date;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -22,14 +21,6 @@ public class Author {
 
     public Author(UUID uuid, String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
         this.uuid = uuid;
-        this.initials = initials;
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.dateOfBirth = dateOfBirth;
-        this.gender = gender;
-    }
-
-    public Author(String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
         this.initials = initials;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -65,10 +56,6 @@ public class Author {
         return gender;
     }
 
-    public void setUuid(UUID uuid) {
-        this.uuid = uuid;
-    }
-
     public void setInitials(String initials) {
         this.initials = initials;
     }
@@ -92,8 +79,7 @@ public class Author {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Author)) return false;
-        Author author = (Author) o;
+        if (!(o instanceof Author author)) return false;
         return getUuid().equals(author.getUuid()) && getInitials().equals(author.getInitials()) && getFirstname().equals(author.getFirstname()) && getLastname().equals(author.getLastname()) && getDateOfBirth().equals(author.getDateOfBirth()) && getGender() == author.getGender();
     }
 

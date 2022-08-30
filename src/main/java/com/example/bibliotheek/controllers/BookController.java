@@ -1,15 +1,12 @@
 package com.example.bibliotheek.controllers;
 
-import com.example.bibliotheek.dtos.AuthorDto;
 import com.example.bibliotheek.dtos.BookDto;
 import com.example.bibliotheek.dtos.BookInputDto;
-import com.example.bibliotheek.models.Book;
 import com.example.bibliotheek.services.BookService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/books")
@@ -23,9 +20,9 @@ public class BookController {
 
     @GetMapping
     public List<BookDto> getAllBooks(@RequestParam(value = "title",  required = false) Optional<String> title, @RequestParam(value = "initials", required = false) Optional<String> initials , @RequestParam(value = "name", required = false) Optional<String> name){
-        if(title.isEmpty() && !name.isEmpty() && !initials.isEmpty()){
+        if(title.isEmpty() && name.isPresent() && initials.isPresent()){
             return bookService.getAllBooksByAuthor(initials.get(), name.get());
-        }else if (!title.isEmpty() && name.isEmpty() && initials.isEmpty()){
+        }else if (title.isPresent() && name.isEmpty() && initials.isEmpty()){
             return bookService.getAllBooksByTitle(title.get());
         }else {
             return bookService.getAllBooks();
@@ -43,7 +40,7 @@ public class BookController {
     }
 
     @PutMapping("/update/{isbn}")
-    public BookDto updateBook(@RequestBody BookDto dto, @PathVariable String isbn){
+    public BookDto updateBook(@RequestBody BookInputDto dto, @PathVariable String isbn){
         return bookService.updateBook(dto, isbn);
     }
 

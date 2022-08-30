@@ -2,6 +2,7 @@ package com.example.bibliotheek.services;
 
 import com.example.bibliotheek.dtos.BookDto;
 import com.example.bibliotheek.dtos.BookInputDto;
+import com.example.bibliotheek.exceptions.AuthorNotFoundException;
 import com.example.bibliotheek.exceptions.RecordNotFoundException;
 import com.example.bibliotheek.models.Author;
 import com.example.bibliotheek.models.Book;
@@ -52,34 +53,41 @@ public class BookService {
     }
 
     public BookDto saveBook(BookInputDto dto){
-        Book newBook = new Book(dto.getIsbn(), dto.getTitle(), dto.getSubtitle(), dto.getGenre(), dto.getLanguage(), dto.getType(), dto.getPublisher(), authorRepository.findById(dto.getUuid()).get());
-        Book book = bookRepository.save(newBook);
-        return transferBookToBookDto(book);
+        if (authorRepository.findById(dto.uuid()).isPresent()) {
+            Book newBook = new Book(dto.isbn(), dto.title(), dto.subtitle(), dto.genre(), dto.language(), dto.type(), dto.publisher(), authorRepository.findById(dto.uuid()).get());
+            Book book = bookRepository.save(newBook);
+            return transferBookToBookDto(book);
+        }else {
+            throw new AuthorNotFoundException("No author known by this id");
+        }
     }
 
-    public BookDto updateBook(BookDto dto, String isbn){
+    public BookDto updateBook(BookInputDto dto, String isbn){
         if(bookRepository.findById(isbn).isPresent()){
             Book book = bookRepository.findById(isbn).get();
-            if(!book.getAuthor().equals(authorService.transferAuthorDtoToAuthor(dto.getAuthorDto()))){
-                book.setAuthor(authorService.transferAuthorDtoToAuthor(dto.getAuthorDto()));
+            if(authorRepository.findById(dto.uuid()).isPresent()){
+            if(!book.getAuthor().equals(authorRepository.findById(dto.uuid()).get())){
+                book.setAuthor(authorRepository.findById(dto.uuid()).get());
+            }}else {
+                throw new AuthorNotFoundException("No author found by this id");
             }
-            if(!book.getGenre().equals(dto.getGenre())){
-                book.setGenre(dto.getGenre());
+            if(!book.getGenre().equals(dto.genre())){
+                book.setGenre(dto.genre());
             }
-            if(!book.getLanguage().equals(dto.getLanguage())){
-                book.setLanguage(dto.getLanguage());
+            if(!book.getLanguage().equals(dto.language())){
+                book.setLanguage(dto.language());
             }
-            if(!book.getPublisher().equals(dto.getPublisher())){
-                book.setPublisher(dto.getPublisher());
+            if(!book.getPublisher().equals(dto.publisher())){
+                book.setPublisher(dto.publisher());
             }
-            if(!book.getSubtitle().equals(dto.getSubtitle())){
-                book.setSubtitle(dto.getSubtitle());
+            if(!book.getSubtitle().equals(dto.subtitle())){
+                book.setSubtitle(dto.subtitle());
             }
-            if(!book.getTitle().equals(dto.getTitle())){
-                book.setTitle(dto.getTitle());
+            if(!book.getTitle().equals(dto.title())){
+                book.setTitle(dto.title());
             }
-            if(!book.getType().equals(dto.getType())){
-                book.setType(dto.getType());
+            if(!book.getType().equals(dto.type())){
+                book.setType(dto.type());
             }
             return (transferBookToBookDto(bookRepository.save(book)));
 
@@ -94,7 +102,7 @@ public class BookService {
 
 
     public Book transferBookDtoToBook(BookDto dto){
-        return (new Book(dto.getIsbn(), dto.getTitle(), dto.getSubtitle(), dto.getGenre(), dto.getLanguage(), dto.getType(), dto.getPublisher(), authorService.transferAuthorDtoToAuthor(dto.getAuthorDto())));
+        return (new Book(dto.isbn(), dto.title(), dto.subtitle(), dto.genre(), dto.language(), dto.type(), dto.publisher(), authorService.transferAuthorDtoToAuthor(dto.authorDto())));
     }
 
     public BookDto transferBookToBookDto(Book book){
