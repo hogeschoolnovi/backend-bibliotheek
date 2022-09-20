@@ -2,7 +2,6 @@ package com.example.bibliotheek.services;
 
 import com.example.bibliotheek.dtos.AuthorDto;
 import com.example.bibliotheek.exceptions.AuthorNotFoundException;
-import com.example.bibliotheek.exceptions.RecordNotFoundException;
 import com.example.bibliotheek.models.Author;
 import com.example.bibliotheek.models.Gender;
 import com.example.bibliotheek.repoitories.AuthorRepository;

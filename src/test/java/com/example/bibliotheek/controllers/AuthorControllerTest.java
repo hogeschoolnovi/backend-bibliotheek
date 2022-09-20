@@ -1,13 +1,9 @@
 package com.example.bibliotheek.controllers;
 
 import com.example.bibliotheek.dtos.AuthorDto;
-import com.example.bibliotheek.dtos.BookDto;
-import com.example.bibliotheek.dtos.BookInputDto;
 import com.example.bibliotheek.models.Author;
-import com.example.bibliotheek.models.Book;
 import com.example.bibliotheek.models.Gender;
 import com.example.bibliotheek.services.AuthorService;
-import com.example.bibliotheek.services.BookService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
@@ -22,13 +18,10 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 
-import javax.swing.text.DateFormatter;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.UUID;
 
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
