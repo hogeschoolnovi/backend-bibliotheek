@@ -39,12 +39,12 @@ public class BookController {
         return bookService.saveBook(dto);
     }
 
-    @PutMapping("/update/{isbn}")
+    @PutMapping("/{isbn}")
     public BookDto updateBook(@RequestBody BookInputDto dto, @PathVariable String isbn){
         return bookService.updateBook(dto, isbn);
     }
 
-    @DeleteMapping("/delete/{isbn}")
+    @DeleteMapping("/{isbn}")
     public void deleteBook(@PathVariable String isbn){
         bookService.deleteBook(isbn);
     }

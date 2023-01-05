@@ -32,12 +32,12 @@ public class AuthorController {
         return authorService.saveAuthor(dto);
     }
 
-    @PutMapping("/update/{id}")
+    @PutMapping("/{id}")
     public AuthorDto updateAuthor(@RequestBody AuthorDto dto, @PathVariable UUID id){
         return authorService.updateAuthor(dto, id);
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public void deleteAuthor(@PathVariable UUID id){
         authorService.deleteAuthor(id);
     }
