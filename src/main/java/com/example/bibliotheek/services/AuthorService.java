@@ -23,7 +23,7 @@ public class AuthorService {
         return (transferAuthorListToAuthorDtoList(authorRepository.findAll()));
     }
 
-    public AuthorDto getAuthor(UUID id){
+    public AuthorDto getAuthor(Long id){
 
         if(authorRepository.findById(id).isPresent()){
             return (transferAuthorToAuthorDto(authorRepository.findById(id).get()));
@@ -37,7 +37,7 @@ public class AuthorService {
         return (transferAuthorToAuthorDto(authorRepository.save(transferAuthorDtoToAuthor(dto))));
     }
 
-    public AuthorDto updateAuthor(AuthorDto dto, UUID id){
+    public AuthorDto updateAuthor(AuthorDto dto, Long id){
         if(authorRepository.findById(id).isPresent()){
             Author author = authorRepository.findById(id).get();
             if(!author.getInitials().equals(dto.initials())){
@@ -63,16 +63,16 @@ public class AuthorService {
         }
     }
 
-    public void deleteAuthor(UUID id){
+    public void deleteAuthor(Long id){
         authorRepository.deleteById(id);
     }
 
     public Author transferAuthorDtoToAuthor(AuthorDto dto){
-        return (new Author(dto.uuid(), dto.initials(), dto.firstname(), dto.lastname(), dto.dateOfBirth(), dto.gender()));
+        return (new Author(dto.id(), dto.initials(), dto.firstname(), dto.lastname(), dto.dateOfBirth(), dto.gender()));
     }
 
     public AuthorDto transferAuthorToAuthorDto(Author author){
-        return (new AuthorDto(author.getUuid(), author.getInitials(), author.getFirstname(), author.getLastname(), author.getDateOfBirth(), author.getGender()));
+        return (new AuthorDto(author.getId(), author.getInitials(), author.getFirstname(), author.getLastname(), author.getDateOfBirth(), author.getGender()));
     }
 
     public List<AuthorDto> transferAuthorListToAuthorDtoList(List<Author> authors){

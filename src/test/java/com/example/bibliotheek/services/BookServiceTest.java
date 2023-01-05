@@ -55,8 +55,8 @@ class BookServiceTest {
 
     @BeforeEach
     void setUp() {
-        author1 = new Author(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
-        author2 = new Author(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        author1 = new Author(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        author2 = new Author(2L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
         book1 = new Book("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", author1);
         book2 = new Book("9781781103470", "Harry Potter", "en de geheime kamer", "fiction", "NL", "paperback", "Pottermore publishing", author1);
         book3 = new Book("9789026139406", "Mathilda", "", "fiction", "NL", "paperback", "de Fontein Jeugd", author2);
@@ -110,9 +110,9 @@ class BookServiceTest {
 
     @Test
     void saveBook() {
-        BookInputDto dto = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"));
+        BookInputDto dto = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", 1L);
 
-        when(authorRepository.findById(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"))).thenReturn(Optional.of(author1));
+        when(authorRepository.findById(1L)).thenReturn(Optional.of(author1));
         when(bookRepository.save(book1)).thenReturn(book1);
 
         bookService.saveBook(dto);
@@ -129,17 +129,17 @@ class BookServiceTest {
 
     @Test
     void saveBookThrowsExceptionTest() {
-        assertThrows(AuthorNotFoundException.class, () -> bookService.saveBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0337"))));
+        assertThrows(AuthorNotFoundException.class, () -> bookService.saveBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", 1L)));
     }
     @Test
     void updateBook() {
-        BookInputDto bookInputDto = new BookInputDto("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie",UUID.fromString("70080f94-539c-466d-9976-b838dc037842") );
+        BookInputDto bookInputDto = new BookInputDto("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie",2L );
         Book book = new Book("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie", author1);
-        Author author3 = new Author(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        Author author3 = new Author(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
         Book book4 = new Book("9789076174105" ,"Harry Potters", "en de gevangene van Azkaban", "novel", "EN", "ebook", "uitgeverij de Harmanie", author3);
 
         when(bookRepository.findById("9789076174105")).thenReturn(Optional.of(book1));
-        when(authorRepository.findById(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"))).thenReturn(Optional.of(author2));
+        when(authorRepository.findById(2L)).thenReturn(Optional.of(author2));
         when(bookRepository.save(any())).thenReturn(book4);
 
         bookService.updateBook(bookInputDto,"9789076174105");
@@ -158,13 +158,13 @@ class BookServiceTest {
 
     @Test
     void updateBookThrowsExceptionForBookTest() {
-        assertThrows(RecordNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336")), "9789076174103"));
+        assertThrows(RecordNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", 1L), "9789076174103"));
     }
 
     @Test
     void updateBookThrowsExceptionForAuthorTest() {
         when(bookRepository.findById(any())).thenReturn(Optional.of(book1));
-        assertThrows(AuthorNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb5689")), "9789076174105"));
+        assertThrows(AuthorNotFoundException.class, () -> bookService.updateBook(new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", 2L), "9789076174105"));
     }
 
     @Test

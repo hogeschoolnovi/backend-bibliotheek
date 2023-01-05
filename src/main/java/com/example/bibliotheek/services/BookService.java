@@ -53,8 +53,8 @@ public class BookService {
     }
 
     public BookDto saveBook(BookInputDto dto){
-        if (authorRepository.findById(dto.uuid()).isPresent()) {
-            Book newBook = new Book(dto.isbn(), dto.title(), dto.subtitle(), dto.genre(), dto.language(), dto.type(), dto.publisher(), authorRepository.findById(dto.uuid()).get());
+        if (authorRepository.findById(dto.id()).isPresent()) {
+            Book newBook = new Book(dto.isbn(), dto.title(), dto.subtitle(), dto.genre(), dto.language(), dto.type(), dto.publisher(), authorRepository.findById(dto.id()).get());
             Book book = bookRepository.save(newBook);
             return transferBookToBookDto(book);
         }else {
@@ -65,9 +65,9 @@ public class BookService {
     public BookDto updateBook(BookInputDto dto, String isbn){
         if(bookRepository.findById(isbn).isPresent()){
             Book book = bookRepository.findById(isbn).get();
-            if(authorRepository.findById(dto.uuid()).isPresent()){
-            if(!book.getAuthor().equals(authorRepository.findById(dto.uuid()).get())){
-                book.setAuthor(authorRepository.findById(dto.uuid()).get());
+            if(authorRepository.findById(dto.id()).isPresent()){
+            if(!book.getAuthor().equals(authorRepository.findById(dto.id()).get())){
+                book.setAuthor(authorRepository.findById(dto.id()).get());
             }}else {
                 throw new AuthorNotFoundException("No author found by this id");
             }

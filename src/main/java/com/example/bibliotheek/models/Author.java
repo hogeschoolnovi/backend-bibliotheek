@@ -10,8 +10,7 @@ import java.util.UUID;
 @Entity
 public class Author {
     @Id
-    @GeneratedValue
-    private UUID uuid;
+    private Long id;
 
     private String initials;
     private String firstname;
@@ -19,8 +18,8 @@ public class Author {
     private LocalDate dateOfBirth;
     private Gender gender;
 
-    public Author(UUID uuid, String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
-        this.uuid = uuid;
+    public Author(Long id, String initials, String firstname, String lastname, LocalDate dateOfBirth, Gender gender) {
+        this.id = id;
         this.initials = initials;
         this.firstname = firstname;
         this.lastname = lastname;
@@ -32,8 +31,8 @@ public class Author {
 
     }
 
-    public UUID getUuid() {
-        return uuid;
+    public Long getId() {
+        return id;
     }
 
     public String getInitials() {
@@ -80,11 +79,11 @@ public class Author {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Author author)) return false;
-        return getUuid().equals(author.getUuid()) && getInitials().equals(author.getInitials()) && getFirstname().equals(author.getFirstname()) && getLastname().equals(author.getLastname()) && getDateOfBirth().equals(author.getDateOfBirth()) && getGender() == author.getGender();
+        return getId().equals(author.getId()) && getInitials().equals(author.getInitials()) && getFirstname().equals(author.getFirstname()) && getLastname().equals(author.getLastname()) && getDateOfBirth().equals(author.getDateOfBirth()) && getGender() == author.getGender();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(getUuid(), getInitials(), getFirstname(), getLastname(), getDateOfBirth(), getGender());
+        return Objects.hash(getId(), getInitials(), getFirstname(), getLastname(), getDateOfBirth(), getGender());
     }
 }

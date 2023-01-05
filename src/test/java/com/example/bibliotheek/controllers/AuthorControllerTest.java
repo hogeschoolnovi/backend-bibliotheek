@@ -10,12 +10,12 @@ import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(AuthorController.class)
 class AuthorControllerTest {
 
@@ -47,12 +47,12 @@ class AuthorControllerTest {
 
     @BeforeEach
     public void setUp() {
-        author1 = new Author(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
-        author2 = new Author(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        author1 = new Author(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        author2 = new Author(2L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
 
-        authorDto1 = new AuthorDto(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
-        authorDto2 = new AuthorDto(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
-        authorDto3 = new AuthorDto(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        authorDto1 = new AuthorDto(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        authorDto2 = new AuthorDto(2L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        authorDto3 = new AuthorDto(3L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
 
 
     }
@@ -63,13 +63,13 @@ class AuthorControllerTest {
 
             mockMvc.perform(get("/authors"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("$[0].uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                    .andExpect(jsonPath("$[0].id").value("1"))
                     .andExpect(jsonPath("$[0].initials").value("J.K."))
                     .andExpect(jsonPath("$[0].firstname").value( "Joanne Kathleen"))
                     .andExpect(jsonPath("$[0].lastname").value( "Rowling"))
                     .andExpect(jsonPath("$[0].dateOfBirth").value("1965-07-31"))
                     .andExpect(jsonPath("$[0].gender").value( "FEMALE"))
-                    .andExpect(jsonPath("$[1].uuid").value("70080f94-539c-466d-9976-b838dc037842"))
+                    .andExpect(jsonPath("$[1].id").value("2"))
                     .andExpect(jsonPath("$[1].initials").value("R."))
                     .andExpect(jsonPath("$[1].firstname").value( "Roald"))
                     .andExpect(jsonPath("$[1].lastname").value( "Dahl"))
@@ -79,11 +79,11 @@ class AuthorControllerTest {
 
     @Test
     void getAuthor() throws Exception {
-            given(authorService.getAuthor(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"))).willReturn(authorDto1);
+            given(authorService.getAuthor(1L)).willReturn(authorDto1);
 
-            mockMvc.perform(get("/authors/aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+            mockMvc.perform(get("/authors/1"))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                    .andExpect(jsonPath("id").value("1"))
                     .andExpect(jsonPath("initials").value("J.K."))
                     .andExpect(jsonPath("firstname").value( "Joanne Kathleen"))
                     .andExpect(jsonPath("lastname").value( "Rowling"))
@@ -99,7 +99,7 @@ class AuthorControllerTest {
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(authorDto1)))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                    .andExpect(jsonPath("id").value("1"))
                     .andExpect(jsonPath("initials").value("J.K."))
                     .andExpect(jsonPath("firstname").value( "Joanne Kathleen"))
                     .andExpect(jsonPath("lastname").value( "Rowling"))
@@ -109,13 +109,13 @@ class AuthorControllerTest {
 
     @Test
     void updateAuthor() throws Exception {
-            given(authorService.updateAuthor(authorDto2, UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"))).willReturn(authorDto3);
+            given(authorService.updateAuthor(authorDto2, 1L)).willReturn(authorDto3);
 
-            mockMvc.perform(put("/authors/update/aabe4998-522a-4bd7-97c4-c296b7fb0336")
+            mockMvc.perform(put("/authors/1")
                             .contentType(MediaType.APPLICATION_JSON)
                             .content(asJsonString(authorDto2)))
                     .andExpect(status().isOk())
-                    .andExpect(jsonPath("uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                    .andExpect(jsonPath("id").value("3"))
                     .andExpect(jsonPath("initials").value("R."))
                     .andExpect(jsonPath("firstname").value( "Roald"))
                     .andExpect(jsonPath("lastname").value( "Dahl"))
@@ -125,7 +125,7 @@ class AuthorControllerTest {
 
     @Test
     void deleteAuthor() throws Exception {
-            mockMvc.perform(delete("/authors/delete/aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+            mockMvc.perform(delete("/authors/1"))
                     .andExpect(status().isOk());
         }
         public static String asJsonString(final AuthorDto obj) {

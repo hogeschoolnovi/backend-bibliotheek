@@ -23,7 +23,7 @@ public class AuthorController {
     }
 
     @GetMapping("/{id}")
-    public AuthorDto getAuthor(@PathVariable UUID id){
+    public AuthorDto getAuthor(@PathVariable Long id){
         return authorService.getAuthor(id);
     }
 
@@ -33,12 +33,12 @@ public class AuthorController {
     }
 
     @PutMapping("/{id}")
-    public AuthorDto updateAuthor(@RequestBody AuthorDto dto, @PathVariable UUID id){
+    public AuthorDto updateAuthor(@RequestBody AuthorDto dto, @PathVariable Long id){
         return authorService.updateAuthor(dto, id);
     }
 
     @DeleteMapping("/{id}")
-    public void deleteAuthor(@PathVariable UUID id){
+    public void deleteAuthor(@PathVariable Long id){
         authorService.deleteAuthor(id);
     }
 }

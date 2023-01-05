@@ -11,12 +11,12 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
@@ -28,7 +28,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @WebMvcTest(BookController.class)
 class BookControllerTest {
 
@@ -56,23 +56,23 @@ class BookControllerTest {
 
     @BeforeEach
     public void setUp() {
-        author1 = new Author(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
-        author2 = new Author(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        author1 = new Author(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        author2 = new Author(2L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
 
         book1 = new Book("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", author1);
         book2 = new Book("9781781103470", "Harry Potter", "en de geheime kamer", "fiction", "NL", "paperback", "Pottermore publishing", author1);
         book3 = new Book("9789026139406", "Mathilda", "", "fiction", "NL", "paperback", "de Fontein Jeugd", author2);
 
-        authorDto1 = new AuthorDto(UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336") ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
-        authorDto2 = new AuthorDto(UUID.fromString("70080f94-539c-466d-9976-b838dc037842"),"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
+        authorDto1 = new AuthorDto(1L ,"J.K.", "Joanne Kathleen", "Rowling", LocalDate.of(1965,7,31), Gender.FEMALE);
+        authorDto2 = new AuthorDto(2L,"R.", "Roald", "Dahl", LocalDate.of(1916,9,13), Gender.MALE);
 
         bookDto1 = new BookDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", authorDto1);
         bookDto2 = new BookDto("9781781103470", "Harry Potter", "en de geheime kamer", "fiction", "NL", "paperback", "Pottermore publishing", authorDto1);
         bookDto3 = new BookDto("9789026139406", "Mathilda", "", "fiction", "NL", "paperback", "de Fontein Jeugd", authorDto2);
         bookDto4 = new BookDto("9789076174105", "Harry Potter", "en de geheime kamer", "sience fiction", "EN", "ebook", "Pottermore publishing", authorDto2);
 
-        bookInputDto1 = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", UUID.fromString("aabe4998-522a-4bd7-97c4-c296b7fb0336"));
-        bookInputDto2 = new BookInputDto("9789076174105", "Harry Potter", "en de geheime kamer", "sience fiction", "EN", "ebook", "Pottermore publishing", UUID.fromString("70080f94-539c-466d-9976-b838dc037842"));
+        bookInputDto1 = new BookInputDto("9789076174105", "Harry Potter", "en de steen der wijzen", "fiction", "NL", "paperback", "uitgeverij de Harmonie", 1L);
+        bookInputDto2 = new BookInputDto("9789076174105", "Harry Potter", "en de geheime kamer", "sience fiction", "EN", "ebook", "Pottermore publishing", 2L);
 
     }
 
@@ -89,7 +89,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[0].language").value("NL"))
                 .andExpect(jsonPath("$[0].type").value("paperback"))
                 .andExpect(jsonPath("$[0].publisher").value("uitgeverij de Harmonie"))
-                .andExpect(jsonPath("$[0].authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("$[0].authorDto.id").value("1"))
                 .andExpect(jsonPath("$[0].authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("$[0].authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("$[0].authorDto.lastname").value( "Rowling"))
@@ -102,7 +102,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[1].language").value("NL"))
                 .andExpect(jsonPath("$[1].type").value("paperback"))
                 .andExpect(jsonPath("$[1].publisher").value( "Pottermore publishing"))
-                .andExpect(jsonPath("$[1].authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("$[1].authorDto.id").value("1"))
                 .andExpect(jsonPath("$[1].authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("$[1].authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("$[1].authorDto.lastname").value( "Rowling"))
@@ -115,7 +115,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[2].language").value( "NL"))
                 .andExpect(jsonPath("$[2].type").value("paperback"))
                 .andExpect(jsonPath("$[2].publisher").value("de Fontein Jeugd"))
-                .andExpect(jsonPath("$[2].authorDto.uuid").value("70080f94-539c-466d-9976-b838dc037842"))
+                .andExpect(jsonPath("$[2].authorDto.id").value("2"))
                 .andExpect(jsonPath("$[2].authorDto.initials").value("R."))
                 .andExpect(jsonPath("$[2].authorDto.firstname").value( "Roald"))
                 .andExpect(jsonPath("$[2].authorDto.lastname").value( "Dahl"))
@@ -136,7 +136,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[0].language").value("NL"))
                 .andExpect(jsonPath("$[0].type").value("paperback"))
                 .andExpect(jsonPath("$[0].publisher").value("uitgeverij de Harmonie"))
-                .andExpect(jsonPath("$[0].authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("$[0].authorDto.id").value("1"))
                 .andExpect(jsonPath("$[0].authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("$[0].authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("$[0].authorDto.lastname").value( "Rowling"))
@@ -149,7 +149,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[1].language").value("NL"))
                 .andExpect(jsonPath("$[1].type").value("paperback"))
                 .andExpect(jsonPath("$[1].publisher").value( "Pottermore publishing"))
-                .andExpect(jsonPath("$[1].authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("$[1].authorDto.id").value("1"))
                 .andExpect(jsonPath("$[1].authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("$[1].authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("$[1].authorDto.lastname").value( "Rowling"))
@@ -171,7 +171,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("$[0].language").value( "NL"))
                 .andExpect(jsonPath("$[0].type").value("paperback"))
                 .andExpect(jsonPath("$[0].publisher").value("de Fontein Jeugd"))
-                .andExpect(jsonPath("$[0].authorDto.uuid").value("70080f94-539c-466d-9976-b838dc037842"))
+                .andExpect(jsonPath("$[0].authorDto.id").value("2"))
                 .andExpect(jsonPath("$[0].authorDto.initials").value("R."))
                 .andExpect(jsonPath("$[0].authorDto.firstname").value( "Roald"))
                 .andExpect(jsonPath("$[0].authorDto.lastname").value( "Dahl"))
@@ -193,7 +193,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("language").value("NL"))
                 .andExpect(jsonPath("type").value("paperback"))
                 .andExpect(jsonPath("publisher").value("uitgeverij de Harmonie"))
-                .andExpect(jsonPath("authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("authorDto.id").value("1"))
                 .andExpect(jsonPath("authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("authorDto.lastname").value( "Rowling"))
@@ -216,7 +216,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("language").value("NL"))
                 .andExpect(jsonPath("type").value("paperback"))
                 .andExpect(jsonPath("publisher").value("uitgeverij de Harmonie"))
-                .andExpect(jsonPath("authorDto.uuid").value("aabe4998-522a-4bd7-97c4-c296b7fb0336"))
+                .andExpect(jsonPath("authorDto.id").value("1"))
                 .andExpect(jsonPath("authorDto.initials").value("J.K."))
                 .andExpect(jsonPath("authorDto.firstname").value( "Joanne Kathleen"))
                 .andExpect(jsonPath("authorDto.lastname").value( "Rowling"))
@@ -230,7 +230,7 @@ class BookControllerTest {
     void updateBook() throws Exception {
         given(bookService.updateBook(bookInputDto2, "9789076174105")).willReturn(bookDto4);
 
-        mockMvc.perform(put("/books/update/9789076174105")
+        mockMvc.perform(put("/books/9789076174105")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(asJsonString(bookInputDto2)))
                 .andExpect(status().isOk())
@@ -241,7 +241,7 @@ class BookControllerTest {
                 .andExpect(jsonPath("language").value("EN"))
                 .andExpect(jsonPath("type").value("ebook"))
                 .andExpect(jsonPath("publisher").value("Pottermore publishing"))
-                .andExpect(jsonPath("authorDto.uuid").value("70080f94-539c-466d-9976-b838dc037842"))
+                .andExpect(jsonPath("authorDto.id").value("2"))
                 .andExpect(jsonPath("authorDto.initials").value("R."))
                 .andExpect(jsonPath("authorDto.firstname").value( "Roald"))
                 .andExpect(jsonPath("authorDto.lastname").value( "Dahl"))
@@ -251,7 +251,7 @@ class BookControllerTest {
 
     @Test
     void deleteBook() throws Exception {
-        mockMvc.perform(delete("/books/delete/9789076174105"))
+        mockMvc.perform(delete("/books/9789076174105"))
                 .andExpect(status().isOk());
     }
     public static String asJsonString(final Object obj) {
